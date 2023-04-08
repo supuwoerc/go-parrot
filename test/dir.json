@@ -2,6 +2,14 @@
   "text": "src",
   "children": [
     {
+      "text": "service",
+      "children": [
+        {
+          "text": "dto"
+        }
+      ]
+    },
+    {
       "text": "api"
     },
     {
@@ -27,14 +35,6 @@
     },
     {
       "text": "router"
-    },
-    {
-      "text": "service",
-      "children": [
-        {
-          "text": "dto"
-        }
-      ]
     },
     {
       "text": "utils"
