@@ -13,5 +13,4 @@ func InitConfig() {
 	if err != nil {
 		panic(fmt.Sprintf("配置文件读取失败：%s", err.Error()))
 	}
-	fmt.Println(viper.GetString("server.port"))
 }

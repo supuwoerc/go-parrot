@@ -12,5 +12,5 @@ func Start() {
 }
 
 func Clean() {
-	fmt.Println("程序退出完成...")
+	fmt.Println("程序退出清理动作完成...")
 }
