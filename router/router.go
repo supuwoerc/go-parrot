@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "go-parrot/docs"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -35,6 +38,8 @@ func InitRouter() {
 	for _, register := range globalRouterRegisters {
 		register(publicRouterGroup, authRouterGroup)
 	}
+	//集成swagger http://localhost:8090/swagger/index.html
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	serverPort := viper.GetString("server.port")
 	if serverPort == "" {
 		serverPort = "8848"
