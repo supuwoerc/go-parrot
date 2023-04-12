@@ -2,12 +2,12 @@ package router
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "go-parrot/docs"
+	"go-parrot/global"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -49,9 +49,9 @@ func InitRouter() {
 		Handler: r,
 	}
 	go func() {
+		global.Logger.Infof("服务启动，监听端口：%s", serverPort)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			//TODO:记录日志
-			fmt.Printf("启动服务失败：%s\n", err.Error())
+			global.Logger.Errorf("启动服务失败：%s", err.Error())
 		}
 	}()
 	//当ctx未取消时，程序会堵塞在此处
@@ -59,10 +59,9 @@ func InitRouter() {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelFunc()
 	if err := server.Shutdown(ctx); err != nil {
-		//TODO:记录日志
-		fmt.Printf("服务关闭失败：%s\n", err.Error())
+		global.Logger.Errorf("服务关闭失败：%s\n", err.Error())
 	} else {
-		fmt.Println("服务关闭成功...")
+		global.Logger.Info("服务关闭成功...")
 	}
 }
 

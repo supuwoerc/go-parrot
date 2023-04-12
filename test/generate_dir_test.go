@@ -16,7 +16,7 @@ type DirDesc struct {
 }
 
 var currentDir string        //当前目录
-var workspaceRootDir string  //项目根目录
+var workspaceRootDir string  //当前目录的上级目录
 var filePathSeparator string //路径分割符
 
 const dirJsonFileName = "dir.json"

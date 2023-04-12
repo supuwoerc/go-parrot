@@ -15,10 +15,14 @@ import (
 // 初始化日志组件
 func InitLogger() *zap.SugaredLogger {
 	logMode := zapcore.DebugLevel
+	fmt.Println(viper.GetBool("mode.dev"))
 	if !viper.GetBool("mode.dev") {
 		logMode = zapcore.InfoLevel
 	}
-	core := zapcore.NewCore(getEncoder(), getWriteSyncer(), logMode)
+	//输出目标(文件&控制台)
+	writeSyncers := zapcore.NewMultiWriteSyncer(getWriteSyncer(), zapcore.AddSync(os.Stdout))
+	//配置encoder,输出目标,模式
+	core := zapcore.NewCore(getEncoder(), writeSyncers, logMode)
 	return zap.New(core).Sugar()
 }
 
@@ -36,13 +40,12 @@ func getEncoder() zapcore.Encoder {
 func getWriteSyncer() zapcore.WriteSyncer {
 	separator := string(filepath.Separator)
 	dir, _ := os.Getwd()
-	logFile := strings.Join([]string{dir, "log", time.Now().Format("2006-01-02"), ".txt"}, separator)
-	fmt.Println(logFile)
+	logFile := strings.Join([]string{dir, "log", time.Now().Format("2006-01-02") + ".txt"}, separator)
 	lumberJackLogger := lumberjack.Logger{
 		Filename:   logFile,
-		MaxSize:    viper.GetInt("logger.MaxSize"),
-		MaxBackups: viper.GetInt("logger.MaxBackups"),
-		MaxAge:     viper.GetInt("logger.MaxAge"),
+		MaxSize:    viper.GetInt("log.MaxSize"),
+		MaxBackups: viper.GetInt("log.MaxBackups"),
+		MaxAge:     viper.GetInt("log.MaxAge"),
 		Compress:   false,
 	}
 	return zapcore.AddSync(&lumberJackLogger)

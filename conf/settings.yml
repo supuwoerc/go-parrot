@@ -1,8 +1,12 @@
 mode:
   dev: true
+log:
+  MaxSize: 1
+  MaxBackups: 10
+  MaxAge: 90
 server:
   port: 8090
-logger:
-  MaxSize: 1,      #单个日志文件最大尺寸(m)，超出自动分割文件
-  MaxBackups: 10,  #保留日志的最大个数
-  MaxAge: 90,      #保留日志的最大天数
+
+
+
+
