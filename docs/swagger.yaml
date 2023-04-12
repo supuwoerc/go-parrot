@@ -1,7 +1,7 @@
 info:
   contact: {}
   description: 使用golang开发后台管理系统
-  title: GO-Web开发记录
+  title: Go-Parrot鹦鹉学舌
   version: 1.0.0
 paths:
   /api/v1/public/user/login:

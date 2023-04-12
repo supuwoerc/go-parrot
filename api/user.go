@@ -20,7 +20,7 @@ func NewUserApi() UserApi {
 // @Success 200 {string} string "登录成功"
 // @Failure 400 {string} string "登录失败"
 // @Router /api/v1/public/user/login [post]
-func (userApi *UserApi) Login(context *gin.Context) {
+func (userApi UserApi) Login(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"message": "login success!",
 	})

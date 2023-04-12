@@ -2,7 +2,7 @@ package main
 
 import "go-parrot/cmd"
 
-// @title GO-Web开发记录
+// @title Go-Parrot鹦鹉学舌
 // @version 1.0.0
 // @description 使用golang开发后台管理系统
 func main() {

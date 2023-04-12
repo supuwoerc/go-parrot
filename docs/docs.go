@@ -64,7 +64,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "GO-Web开发记录",
+	Title:            "Go-Parrot鹦鹉学舌",
 	Description:      "使用golang开发后台管理系统",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
