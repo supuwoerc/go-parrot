@@ -5,9 +5,12 @@ import (
 	"go-parrot/conf"
 	"go-parrot/global"
 	"go-parrot/router"
+	"go-parrot/utils"
 )
 
 func Start() {
+	//初始化项目中产生的全部错误
+	var initErrors error
 	//初始化配置文件
 	conf.InitConfig()
 	//初始化日志组件
@@ -16,7 +19,14 @@ func Start() {
 	db, err := conf.InitDB()
 	global.DB = db
 	if err != nil {
-		fmt.Println(err.Error())
+		initErrors = utils.AppendError(initErrors, err)
+	}
+	//收集初始化过程中产生的全部错误
+	if initErrors != nil {
+		if global.Logger != nil {
+			global.Logger.Error(initErrors.Error())
+		}
+		panic(initErrors.Error())
 	}
 	//初始化gin-router
 	router.InitRouter()
