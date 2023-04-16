@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -15,7 +14,6 @@ import (
 // 初始化日志组件
 func InitLogger() *zap.SugaredLogger {
 	logMode := zapcore.DebugLevel
-	fmt.Println(viper.GetBool("mode.dev"))
 	if !viper.GetBool("mode.dev") {
 		logMode = zapcore.InfoLevel
 	}

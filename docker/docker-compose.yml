@@ -1,0 +1,27 @@
+version: "3.0"
+services:
+  database:
+    container_name: "go-parrot-database-dev"
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: "go-parrot"
+      MYSQL_USER: "go-parrot"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+#  redis:
+#    container_name: "golang-mall-redis-dev"
+#    restart: always
+#    image: redis:latest
+#    ports:
+#      - "6379:6379"
+#    expose:
+#      - "6379"
+#    volumes:
+#      - ./redis:/data
+
