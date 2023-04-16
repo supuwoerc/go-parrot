@@ -3,7 +3,7 @@ mode:
 server:
   port: 8090
 db:
-  dsn: go-parrot:password@tcp(127.0.0.1:3306)/go-parro?charset=utf8mb4&parseTime=True&loc=Local
+  dsn: go-parrot:password@tcp(127.0.0.1:3306)/go-parrot?charset=utf8mb4&parseTime=True&loc=Local
   maxIdleConn: 10 # 最多空闲连接数
   maxOpenConn: 10 # 最多打开连接数
 log:

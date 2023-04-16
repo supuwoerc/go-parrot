@@ -12,6 +12,12 @@ func Start() {
 	conf.InitConfig()
 	//初始化日志组件
 	global.Logger = conf.InitLogger()
+	//初始化数据库连接
+	db, err := conf.InitDB()
+	global.DB = db
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 	//初始化gin-router
 	router.InitRouter()
 }

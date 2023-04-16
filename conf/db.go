@@ -2,6 +2,7 @@ package conf
 
 import (
 	"github.com/spf13/viper"
+	"go-parrot/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -31,5 +32,6 @@ func InitDB() (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(viper.GetInt("db.maxIdleConn"))
 	sqlDB.SetMaxOpenConns(viper.GetInt("db.maxOpenConn"))
 	sqlDB.SetConnMaxLifetime(time.Hour)
+	db.AutoMigrate(&model.User{})
 	return db, err
 }
