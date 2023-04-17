@@ -21,6 +21,7 @@ func Start() {
 	if err != nil {
 		initErrors = utils.AppendError(initErrors, err)
 	}
+	conf.InitRedis()
 	//收集初始化过程中产生的全部错误
 	if initErrors != nil {
 		if global.Logger != nil {
