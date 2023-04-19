@@ -33,11 +33,17 @@ func GenerateToken(id int, name string) (string, error) {
 // 解析token
 func ParseToken(tokenString string) (JwtCustomClaims, error) {
 	claims := JwtCustomClaims{}
-	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtSignKey, nil
 	})
 	if err == nil && !token.Valid {
 		return claims, errors.New("token已经失效")
 	}
 	return claims, err
+}
+
+// token是否有效
+func IsTokenValid(tokenString string) bool {
+	_, err := ParseToken(tokenString)
+	return err != nil
 }
