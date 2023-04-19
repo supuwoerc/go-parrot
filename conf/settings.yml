@@ -10,6 +10,9 @@ redis:
   Addr: localhost:6379
   Password:
   DB: 0
+jwt:
+  key: parrot-token
+  expire: 1 #失效时间，单位：分钟
 log:
   MaxSize: 1
   MaxBackups: 10

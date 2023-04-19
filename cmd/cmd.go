@@ -35,6 +35,7 @@ func Start() {
 	}
 	//初始化gin-router
 	router.InitRouter()
+
 }
 
 func Clean() {
