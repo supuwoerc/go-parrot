@@ -1,0 +1,43 @@
+{
+  "dir": "src",
+  "children": [
+    {
+      "dir": "api"
+    },
+    {
+      "dir": "cmd"
+    },
+    {
+      "dir": "conf"
+    },
+    {
+      "dir": "dao",
+      "children": [
+        {
+          "dir": "dto"
+        }
+      ]
+    },
+    {
+      "dir": "global"
+    },
+    {
+      "dir": "log"
+    },
+    {
+      "dir": "middleware"
+    },
+    {
+      "dir": "model"
+    },
+    {
+      "dir": "service"
+    },
+    {
+      "dir": "utils"
+    },
+    {
+      "dir": "router"
+    }
+  ]
+}
