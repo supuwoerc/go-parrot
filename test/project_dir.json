@@ -11,12 +11,7 @@
       "dir": "conf"
     },
     {
-      "dir": "dao",
-      "children": [
-        {
-          "dir": "dto"
-        }
-      ]
+      "dir": "dao"
     },
     {
       "dir": "global"
@@ -31,7 +26,12 @@
       "dir": "model"
     },
     {
-      "dir": "service"
+      "dir": "service",
+      "children": [
+        {
+          "dir": "dto"
+        }
+      ]
     },
     {
       "dir": "utils"
