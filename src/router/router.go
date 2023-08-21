@@ -1,9 +1,15 @@
 package router
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"net/http"
+	"os/signal"
+	"strings"
+	"syscall"
+	"time"
 )
 
 type IRouteRegister = func(public *gin.RouterGroup, auth *gin.RouterGroup)
@@ -19,7 +25,8 @@ func RouteRegister(register IRouteRegister) {
 
 // 初始化系统模块路由
 func InitBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
-	InitUserRoutes() //用户基础模块
+	InitBasicRoutes() //测试路由
+	InitUserRoutes()  //用户基础模块
 	for _, val := range routeRegisters {
 		val(public, auth)
 	}
@@ -27,21 +34,36 @@ func InitBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
 
 // 初始化Gin路由
 func InitRouter() {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 	r := gin.Default()
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
 	InitBasicRouter(publicGroup, authGroup)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	serverPort := viper.GetString("server.port")
+	serverPort := strings.Join([]string{":", viper.GetString("server.port")}, "")
 	if serverPort == "" {
 		serverPort = ":10000"
 	}
-	err := r.Run(fmt.Sprintf(":%s", serverPort))
-	if err != nil {
-		panic(fmt.Sprintf("服务启动失败：%s", err.Error()))
+	server := &http.Server{
+		Addr:    serverPort,
+		Handler: r,
 	}
+	go func() {
+		fmt.Printf("服务启动成功，监听端口：%s\n", serverPort)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			// TODO：记录日志
+			fmt.Printf("服务启动失败：%s\n", err.Error())
+			return
+		}
+	}()
+	<-ctx.Done()
+	timeoutCtx, cancelTimeoutCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelTimeoutCtx()
+	if err := server.Shutdown(timeoutCtx); err != nil {
+		// TODO：记录日志
+		fmt.Printf("服务强制关闭：%s", err.Error())
+		return
+	}
+	// TODO：记录日志
+	fmt.Println("服务关闭成功...")
 }
