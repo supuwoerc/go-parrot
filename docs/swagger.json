@@ -1,0 +1,53 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "鹦鹉学舌",
+        "title": "Go-Parrot",
+        "contact": {
+            "name": "Supuwoerc",
+            "url": "https://github.com/supuwoerc",
+            "email": "zhangzhouou@gmail.com"
+        }
+    },
+    "paths": {
+        "/api/public/user/login": {
+            "post": {
+                "description": "用于用户登录系统",
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "登录失败",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

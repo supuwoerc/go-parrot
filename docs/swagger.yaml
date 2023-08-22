@@ -1,0 +1,35 @@
+info:
+  contact:
+    email: zhangzhouou@gmail.com
+    name: Supuwoerc
+    url: https://github.com/supuwoerc
+  description: 鹦鹉学舌
+  title: Go-Parrot
+paths:
+  /api/public/user/login:
+    post:
+      description: 用于用户登录系统
+      parameters:
+      - description: 用户名
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 登录成功
+          schema:
+            type: string
+        "401":
+          description: 登录失败
+          schema:
+            type: string
+      summary: 用户登录
+      tags:
+      - 用户管理模块
+swagger: "2.0"

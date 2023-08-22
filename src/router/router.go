@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "go-parrot/docs"
 	"net/http"
 	"os/signal"
 	"strings"
@@ -32,6 +35,11 @@ func InitBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
 	}
 }
 
+// 初始化swagger
+func InitSwagger(r *gin.Engine) {
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+}
+
 // 初始化Gin路由
 func InitRouter() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -40,6 +48,7 @@ func InitRouter() {
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
 	InitBasicRouter(publicGroup, authGroup)
+	InitSwagger(r)
 	serverPort := strings.Join([]string{":", viper.GetString("server.port")}, "")
 	if serverPort == "" {
 		serverPort = ":10000"

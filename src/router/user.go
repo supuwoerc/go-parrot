@@ -2,15 +2,16 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"go-parrot/src/api"
 )
 
 func InitUserRoutes() {
 	RouteRegister(func(public *gin.RouterGroup, auth *gin.RouterGroup) {
-		public.POST("/login", func(context *gin.Context) {
-			context.AbortWithStatusJSON(http.StatusOK, gin.H{
-				"message": "login success",
-			})
-		})
+		userGroup := public.Group("/user")
+		{
+			user := api.NewUser()
+			userGroup.POST("/login", user.Login)
+		}
+
 	})
 }
