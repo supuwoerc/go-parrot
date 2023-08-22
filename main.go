@@ -3,7 +3,7 @@ package main
 import "go-parrot/src/cmd"
 
 // @title Go-Parrot
-// @vision 1.0.0
+// @version 1.0.0
 // @description 鹦鹉学舌
 // @contact.name Supuwoerc
 // @contact.email zhangzhouou@gmail.com

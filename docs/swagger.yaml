@@ -5,6 +5,7 @@ info:
     url: https://github.com/supuwoerc
   description: 鹦鹉学舌
   title: Go-Parrot
+  version: 1.0.0
 paths:
   /api/public/user/login:
     post:

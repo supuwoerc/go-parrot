@@ -7,7 +7,8 @@
             "name": "Supuwoerc",
             "url": "https://github.com/supuwoerc",
             "email": "zhangzhouou@gmail.com"
-        }
+        },
+        "version": "1.0.0"
     },
     "paths": {
         "/api/public/user/login": {
