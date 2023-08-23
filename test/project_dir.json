@@ -17,9 +17,6 @@
       "dir": "global"
     },
     {
-      "dir": "log"
-    },
-    {
       "dir": "middleware"
     },
     {

@@ -8,6 +8,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "go-parrot/docs"
+	"go-parrot/src/global"
 	"net/http"
 	"os/signal"
 	"strings"
@@ -58,10 +59,9 @@ func InitRouter() {
 		Handler: r,
 	}
 	go func() {
-		fmt.Printf("服务启动成功，监听端口：%s\n", serverPort)
+		global.Logger.Info(fmt.Sprintf("服务启动成功，监听端口：%s", serverPort))
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			// TODO：记录日志
-			fmt.Printf("服务启动失败：%s\n", err.Error())
+			global.Logger.Error(fmt.Sprintf("服务启动失败：%s", err.Error()))
 			return
 		}
 	}()
@@ -69,10 +69,8 @@ func InitRouter() {
 	timeoutCtx, cancelTimeoutCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelTimeoutCtx()
 	if err := server.Shutdown(timeoutCtx); err != nil {
-		// TODO：记录日志
-		fmt.Printf("服务强制关闭：%s", err.Error())
+		global.Logger.Error(fmt.Sprintf("服务强制关闭：%s", err.Error()))
 		return
 	}
-	// TODO：记录日志
-	fmt.Println("服务关闭成功...")
+	global.Logger.Info("服务关闭成功...")
 }

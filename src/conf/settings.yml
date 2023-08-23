@@ -1,2 +1,8 @@
+mode:
+  dev: true
 server:
   port: 8888
+log:
+  maxSize: 1     #日志文件切割尺寸(m)
+  maxBackups: 10 #保留文件对最大个数
+  maxAge: 90     #保留文件对最大天数
