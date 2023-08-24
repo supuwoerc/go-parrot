@@ -2,7 +2,12 @@ mode:
   dev: true
 server:
   port: 8888
+mysql:
+  dsn: go_parrot:password@tcp(127.0.0.1:3306)/go_parrot?charset=utf8mb4&parseTime=True&loc=Local
+  maxIdleConn: 10
+  maxOpenConn: 10
 log:
   maxSize: 1     #日志文件切割尺寸(m)
   maxBackups: 10 #保留文件对最大个数
   maxAge: 90     #保留文件对最大天数
+

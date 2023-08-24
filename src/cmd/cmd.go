@@ -11,6 +11,7 @@ func Start() {
 	fmt.Println("cmd.Start")
 	conf.InitSystemConfig()
 	global.Logger = conf.InitLogger()
+	global.DB = conf.InitDatabase()
 	router.InitRouter()
 }
 
