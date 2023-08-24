@@ -1,9 +1,7 @@
 package conf
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
-	"go-parrot/src/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -11,7 +9,7 @@ import (
 	"time"
 )
 
-func InitDatabase() *gorm.DB {
+func InitDatabase() (*gorm.DB, error) {
 	dsn := viper.GetString("mysql.dsn")
 	logMode := logger.Info
 	if !viper.GetBool("mode.dev") {
@@ -25,18 +23,14 @@ func InitDatabase() *gorm.DB {
 		Logger: logger.Default.LogMode(logMode),
 	})
 	if err != nil {
-		errorInfo := fmt.Sprintf("数据库连接失败,请检查dsn设置：%s", err.Error())
-		global.Logger.Error(errorInfo)
-		panic(errorInfo)
+		return nil, err
 	}
 	link, err := db.DB()
 	if err != nil {
-		errorInfo := fmt.Sprintf("获取DB连接失败：%s", err.Error())
-		global.Logger.Error(errorInfo)
-		panic(errorInfo)
+		return nil, err
 	}
 	link.SetMaxIdleConns(viper.GetInt("mysql.maxIdleConn"))
 	link.SetMaxOpenConns(viper.GetInt("mysql.maxOpenConn"))
 	link.SetConnMaxLifetime(time.Hour)
-	return db
+	return db, err
 }
