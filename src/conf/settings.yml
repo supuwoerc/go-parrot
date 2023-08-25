@@ -6,6 +6,10 @@ mysql:
   dsn: go_parrot:password@tcp(127.0.0.1:3306)/go_parrot?charset=utf8mb4&parseTime=True&loc=Local
   maxIdleConn: 10
   maxOpenConn: 10
+redis:
+  addr: localhost:6379
+  password:
+  db: 0
 log:
   maxSize: 1     #日志文件切割尺寸(m)
   maxBackups: 10 #保留文件对最大个数

@@ -19,6 +19,12 @@ func Start() {
 	} else {
 		global.DB = database
 	}
+	redisClient, err := conf.InitRedis()
+	if err != nil {
+		initError = utils.AppendError(initError, err)
+	} else {
+		global.RedisClient = redisClient
+	}
 	if initError != nil {
 		errorInfo := fmt.Sprintf("系统初始化失败，请检查系统配置信息：%s", initError.Error())
 		global.Logger.Error(errorInfo)
