@@ -23,7 +23,7 @@ func NewUser() User {
 // @Router /api/public/user/login [post]
 func (user User) Login(ctx *gin.Context) {
 	serializer.Success(ctx, serializer.BasicResponse{
-		Code: constant.InvalidParams,
+		Code: constant.SUCCESS,
 		Data: nil,
 	})
 }

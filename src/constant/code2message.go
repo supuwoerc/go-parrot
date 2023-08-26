@@ -1,10 +1,10 @@
 package constant
 
 const (
-	SUCCESS       = 200
-	ERROR         = 500
-	InvalidParams = 10000
-	InvalidToken  = 10001
+	SUCCESS       = 10000
+	ERROR         = 10001
+	InvalidParams = 10002
+	InvalidToken  = 10003
 )
 
 var code2message = map[int]string{
