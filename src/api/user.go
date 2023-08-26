@@ -2,7 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"go-parrot/src/constant"
+	"go-parrot/src/serializer"
 )
 
 type User struct {
@@ -21,7 +22,8 @@ func NewUser() User {
 // @Failure 401 {object} string "登录失败"
 // @Router /api/public/user/login [post]
 func (user User) Login(ctx *gin.Context) {
-	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
-		"message": "login success",
+	serializer.Success(ctx, serializer.BasicResponse{
+		Code: constant.InvalidParams,
+		Data: nil,
 	})
 }

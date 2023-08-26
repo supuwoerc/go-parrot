@@ -23,6 +23,9 @@
       "dir": "model"
     },
     {
+      "dir": "constant"
+    },
+    {
       "dir": "service",
       "children": [
         {
