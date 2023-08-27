@@ -11,6 +11,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "go-parrot/docs"
 	"go-parrot/src/global"
+	"go-parrot/src/middleware"
 	"net/http"
 	"os/signal"
 	"strings"
@@ -60,6 +61,8 @@ func InitRouter() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	r := gin.Default()
+	//跨域配置
+	r.Use(middleware.Cors())
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
 	initBasicRouter(publicGroup, authGroup)

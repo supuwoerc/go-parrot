@@ -23,8 +23,8 @@ func NewUserApi() UserApi {
 // @Tags 用户管理模块
 // @Summary 用户登录
 // @Description 用于用户登录系统
-// @Param name json string true "用户名"
-// @Param password json string true "密码"
+// @Param name body string true "用户名"
+// @Param password body string true "密码"
 // @Success 200 {object} string "登录成功"
 // @Failure 401 {object} string "登录失败"
 // @Router /api/public/user/login [post]
