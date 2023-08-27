@@ -9,13 +9,13 @@ import (
 
 type CustomClaims struct {
 	jwt.RegisteredClaims
-	ID   int
+	ID   uint
 	Name string
 }
 
 var signingKey = []byte(viper.GetString("jwt.signingKey"))
 
-func GenerateToken(id int, name string) (string, error) {
+func GenerateToken(id uint, name string) (string, error) {
 	expires := time.Duration(viper.GetInt("jwt.expires"))
 	claims := CustomClaims{
 		ID:   id,
