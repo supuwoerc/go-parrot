@@ -55,10 +55,10 @@ func Success(ctx *gin.Context, res BasicResponse) {
 	HttpResponse(ctx, getDefaultStatus(res, http.StatusOK), res)
 }
 
-func Fail(ctx *gin.Context, res BasicResponse, status int) {
+func Fail(ctx *gin.Context, res BasicResponse) {
 	HttpResponse(ctx, getDefaultStatus(res, http.StatusBadRequest), res)
 }
 
-func ServerFail(ctx *gin.Context, res BasicResponse, status int) {
+func ServerFail(ctx *gin.Context, res BasicResponse) {
 	HttpResponse(ctx, getDefaultStatus(res, http.StatusInternalServerError), res)
 }

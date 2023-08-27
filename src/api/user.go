@@ -1,9 +1,11 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-parrot/src/constant"
 	"go-parrot/src/serializer"
+	"go-parrot/src/service/dto"
 )
 
 type User struct {
@@ -22,8 +24,19 @@ func NewUser() User {
 // @Failure 401 {object} string "登录失败"
 // @Router /api/public/user/login [post]
 func (user User) Login(ctx *gin.Context) {
-	serializer.Success(ctx, serializer.BasicResponse{
-		Code: constant.SUCCESS,
-		Data: nil,
-	})
+	var loginDTO dto.UserLoginDTO
+	errs := ctx.ShouldBind(&loginDTO)
+	if errs != nil {
+		fmt.Println(errs.Error())
+		serializer.Fail(ctx, serializer.BasicResponse{
+			Code:    constant.InvalidParams,
+			Message: errs.Error(),
+		})
+	} else {
+		serializer.Success(ctx, serializer.BasicResponse{
+			Code: constant.SUCCESS,
+			Data: loginDTO.Name + "欢迎你",
+		})
+	}
+
 }

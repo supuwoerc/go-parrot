@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -28,7 +30,7 @@ func RouteRegister(register IRouteRegister) {
 }
 
 // 初始化系统模块路由
-func InitBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
+func initBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
 	InitBasicRoutes() //测试路由
 	InitUserRoutes()  //用户基础模块
 	for _, val := range routeRegisters {
@@ -36,8 +38,20 @@ func InitBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
 	}
 }
 
+// 初始化Gin自定义验证器
+func initValidator() {
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		_ = v.RegisterValidation("abc-prefix", func(fl validator.FieldLevel) bool {
+			if str, ok := fl.Field().Interface().(string); ok {
+				return strings.HasPrefix(str, "abc")
+			}
+			return false
+		})
+	}
+}
+
 // 初始化swagger
-func InitSwagger(r *gin.Engine) {
+func initSwagger(r *gin.Engine) {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -48,8 +62,9 @@ func InitRouter() {
 	r := gin.Default()
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
-	InitBasicRouter(publicGroup, authGroup)
-	InitSwagger(r)
+	initBasicRouter(publicGroup, authGroup)
+	initSwagger(r)
+	initValidator()
 	serverPort := strings.Join([]string{":", viper.GetString("server.port")}, "")
 	if serverPort == "" {
 		serverPort = ":10000"
