@@ -31,7 +31,7 @@ func RouteRegister(register IRouteRegister) {
 }
 
 // 初始化系统模块路由
-func initBasicRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
+func initSystemRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
 	InitBasicRoutes() //测试路由
 	InitUserRoutes()  //用户基础模块
 	for _, val := range routeRegisters {
@@ -65,7 +65,7 @@ func InitRouter() {
 	r.Use(middleware.Cors())
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
-	initBasicRouter(publicGroup, authGroup)
+	initSystemRouter(publicGroup, authGroup)
 	initSwagger(r)
 	initValidator()
 	serverPort := strings.Join([]string{":", viper.GetString("server.port")}, "")
