@@ -23,24 +23,22 @@ const docTemplate = `{
         "/api/public/user/login": {
             "post": {
                 "description": "用于用户登录系统",
+                "consumes": [
+                    "application/json"
+                ],
                 "tags": [
                     "用户管理模块"
                 ],
                 "summary": "用户登录",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
+                        "description": "User Login Info",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginDTO"
+                        }
                     }
                 ],
                 "responses": {
@@ -56,6 +54,23 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.UserLoginDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         }
