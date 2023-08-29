@@ -1,4 +1,11 @@
 definitions:
+  dto.BasicIdDTO:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   dto.UserAddDTO:
     properties:
       avatar:
@@ -42,14 +49,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: 用于添加用户
+      description: 用于根据ID查询用户
       parameters:
-      - description: ADD USER INFO
+      - description: GET USER INFO
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/dto.UserAddDTO'
+          $ref: '#/definitions/dto.BasicIdDTO'
       responses:
         "200":
           description: 操作成功
@@ -59,7 +66,7 @@ paths:
           description: 操作失败
           schema:
             type: string
-      summary: 添加用户
+      summary: 查询用户
       tags:
       - 用户管理模块
   /api/public/user/login:

@@ -12,7 +12,7 @@ func InitUserRoutes() {
 		{
 			userGroup.POST("/login", user.Login)
 			userGroup.POST("/add", user.AddUser)
+			userGroup.GET("/:id", user.GetUserById)
 		}
-
 	})
 }

@@ -2,6 +2,8 @@ package dao
 
 import (
 	"dario.cat/mergo"
+	"errors"
+	"fmt"
 	"go-parrot/src/model"
 	"go-parrot/src/service/dto"
 )
@@ -38,7 +40,7 @@ func (u *UserDao) AddUser(dto *dto.UserAddDTO) error {
 		Password: dto.Password,
 	})
 	if err != nil {
-		return err
+		return errors.New(fmt.Sprintf("参数合并发生错误：%s", err.Error()))
 	}
 	err = u.Orm.Save(&modelUser).Error
 	if err == nil {
@@ -52,5 +54,12 @@ func (u *UserDao) AddUser(dto *dto.UserAddDTO) error {
 func (u *UserDao) GetUserByName(name string) (model.User, error) {
 	var modelUser model.User
 	err := u.Orm.Model(&model.User{}).Where("name = ?", name).First(&modelUser).Error
+	return modelUser, err
+}
+
+// 根据用户ID查询用户
+func (u *UserDao) GetUserById(id uint) (model.User, error) {
+	var modelUser model.User
+	err := u.Orm.Model(&model.User{}).Where("id = ?", id).First(&modelUser).Error
 	return modelUser, err
 }

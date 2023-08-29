@@ -22,22 +22,22 @@ const docTemplate = `{
     "paths": {
         "/api/public/user/add": {
             "post": {
-                "description": "用于添加用户",
+                "description": "用于根据ID查询用户",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "用户管理模块"
                 ],
-                "summary": "添加用户",
+                "summary": "查询用户",
                 "parameters": [
                     {
-                        "description": "ADD USER INFO",
+                        "description": "GET USER INFO",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UserAddDTO"
+                            "$ref": "#/definitions/dto.BasicIdDTO"
                         }
                     }
                 ],
@@ -96,6 +96,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.BasicIdDTO": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserAddDTO": {
             "type": "object",
             "required": [

@@ -33,15 +33,14 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 	errs := ctx.ShouldBind(&loginDTO)
 	if errs != nil {
 		serializer.Fail(ctx, serializer.BasicResponse{
-			Code:    constant.InvalidParams,
-			Message: errs.Error(),
+			Code: constant.InvalidParams,
 		})
 	} else {
 		loginUser, token, err := userApi.Service.Login(loginDTO)
 		if err != nil {
 			serializer.ServerFail(ctx, serializer.BasicResponse{
-				Code: constant.ERROR,
-				Data: err.Error(),
+				Code:    constant.ERROR,
+				Message: err.Error(),
 			})
 		} else {
 			serializer.Success(ctx, serializer.BuildLoginSuccessRes(loginUser, token))
@@ -64,20 +63,48 @@ func (userApi UserApi) AddUser(ctx *gin.Context) {
 	if err != nil {
 		serializer.Fail(ctx, serializer.BasicResponse{
 			Code: constant.InvalidParams,
-			Data: err.Error(),
 		})
 	} else {
 		err := userApi.Service.AddUser(&userAddDTO)
 		if err != nil {
 			serializer.ServerFail(ctx, serializer.BasicResponse{
-				Code: constant.ERROR,
-				Data: err.Error(),
+				Code:    constant.ERROR,
+				Message: err.Error(),
 			})
 		} else {
 			serializer.Success(ctx, serializer.BasicResponse{
 				Code: constant.SUCCESS,
 				Data: userAddDTO,
 			})
+		}
+	}
+}
+
+// @Tags 用户管理模块
+// @Summary 查询用户
+// @Description 用于根据ID查询用户
+// @Accept  json
+// @Param   body body dto.BasicIdDTO true "GET USER INFO"
+// @Success 200 {object} string "操作成功"
+// @Failure 500 {object} string "操作失败"
+// @Router /api/public/user/add [post]
+func (userApi UserApi) GetUserById(ctx *gin.Context) {
+	var basicIdDTO dto.BasicIdDTO
+	err := ctx.ShouldBindUri(&basicIdDTO)
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse{
+			Code: constant.InvalidParams,
+		})
+	} else {
+		user, err := userApi.Service.GetUserById(&basicIdDTO)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse{
+				Code:    constant.ERROR,
+				Data:    nil,
+				Message: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BuildUserWithoutPasswordRes(user))
 		}
 	}
 }
