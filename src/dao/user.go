@@ -1,6 +1,10 @@
 package dao
 
-import "go-parrot/src/model"
+import (
+	"dario.cat/mergo"
+	"go-parrot/src/model"
+	"go-parrot/src/service/dto"
+)
 
 type UserDao struct {
 	BasicDao
@@ -20,4 +24,33 @@ func (u *UserDao) GetUserByNameAndPassword(name string, password string) (model.
 	var user model.User
 	err := u.Orm.Model(&model.User{}).Where("name = ? and password = ?", name, password).First(&user).Error
 	return user, err
+}
+
+// 添加用户
+func (u *UserDao) AddUser(dto *dto.UserAddDTO) error {
+	var modelUser model.User
+	err := mergo.Merge(&modelUser, model.User{
+		Name:     dto.Name,
+		RealName: dto.RealName,
+		Avatar:   dto.Avatar,
+		Phone:    dto.Phone,
+		Email:    dto.Email,
+		Password: dto.Password,
+	})
+	if err != nil {
+		return err
+	}
+	err = u.Orm.Save(&modelUser).Error
+	if err == nil {
+		dto.Password = ""     //移除password
+		dto.ID = modelUser.ID //数据库中的id
+	}
+	return err
+}
+
+// 根据用户名查询用户
+func (u *UserDao) GetUserByName(name string) (model.User, error) {
+	var modelUser model.User
+	err := u.Orm.Model(&model.User{}).Where("name = ?", name).First(&modelUser).Error
+	return modelUser, err
 }

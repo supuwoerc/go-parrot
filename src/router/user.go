@@ -7,10 +7,11 @@ import (
 
 func InitUserRoutes() {
 	RouteRegister(func(public *gin.RouterGroup, auth *gin.RouterGroup) {
+		user := api.NewUserApi()
 		userGroup := public.Group("/user")
 		{
-			user := api.NewUserApi()
 			userGroup.POST("/login", user.Login)
+			userGroup.POST("/add", user.AddUser)
 		}
 
 	})

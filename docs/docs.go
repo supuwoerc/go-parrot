@@ -20,6 +20,43 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/public/user/add": {
+            "post": {
+                "description": "用于添加用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "添加用户",
+                "parameters": [
+                    {
+                        "description": "ADD USER INFO",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserAddDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "操作成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "操作失败",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/public/user/login": {
             "post": {
                 "description": "用于用户登录系统",
@@ -48,7 +85,7 @@ const docTemplate = `{
                             "type": "string"
                         }
                     },
-                    "401": {
+                    "500": {
                         "description": "登录失败",
                         "schema": {
                             "type": "string"
@@ -59,6 +96,36 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.UserAddDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "real_name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UserLoginDTO": {
             "type": "object",
             "required": [

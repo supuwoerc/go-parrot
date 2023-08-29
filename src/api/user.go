@@ -26,7 +26,7 @@ func NewUserApi() UserApi {
 // @Accept  json
 // @Param   body body dto.UserLoginDTO true "User Login Info"
 // @Success 200 {object} string "登录成功"
-// @Failure 401 {object} string "登录失败"
+// @Failure 500 {object} string "登录失败"
 // @Router /api/public/user/login [post]
 func (userApi UserApi) Login(ctx *gin.Context) {
 	var loginDTO dto.UserLoginDTO
@@ -39,7 +39,7 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 	} else {
 		loginUser, token, err := userApi.Service.Login(loginDTO)
 		if err != nil {
-			serializer.Fail(ctx, serializer.BasicResponse{
+			serializer.ServerFail(ctx, serializer.BasicResponse{
 				Code: constant.ERROR,
 				Data: err.Error(),
 			})
@@ -48,4 +48,36 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 		}
 	}
 
+}
+
+// @Tags 用户管理模块
+// @Summary 添加用户
+// @Description 用于添加用户
+// @Accept  json
+// @Param   body body dto.UserAddDTO true "ADD USER INFO"
+// @Success 200 {object} string "操作成功"
+// @Failure 500 {object} string "操作失败"
+// @Router /api/public/user/add [post]
+func (userApi UserApi) AddUser(ctx *gin.Context) {
+	var userAddDTO dto.UserAddDTO
+	err := ctx.ShouldBindJSON(&userAddDTO)
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse{
+			Code: constant.InvalidParams,
+			Data: err.Error(),
+		})
+	} else {
+		err := userApi.Service.AddUser(&userAddDTO)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse{
+				Code: constant.ERROR,
+				Data: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BasicResponse{
+				Code: constant.SUCCESS,
+				Data: userAddDTO,
+			})
+		}
+	}
 }
