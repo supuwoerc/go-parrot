@@ -39,7 +39,7 @@ func HttpResponse[T any](ctx *gin.Context, status int, res BasicResponse[T]) {
 		return
 	}
 	if "" == res.Message {
-		err := mergo.Merge(&res, BasicResponse[any]{
+		err := mergo.Merge(&res, BasicResponse[T]{
 			Message: constant.GetMessage(res.Code),
 		})
 		if err != nil {
