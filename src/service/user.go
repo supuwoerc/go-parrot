@@ -50,7 +50,7 @@ func (u *UserService) AddUser(dto *dto.UserAddDTO) error {
 	return errors.New(fmt.Sprintf("用户名【%s】已存在,添加失败", dto.Name))
 }
 
-// 根据查询用户
+// 根据ID查询用户
 func (u *UserService) GetUserById(dto *dto.BasicIdDTO) (model.User, error) {
 	modelUser, err := u.Dao.GetUserById(dto.ID)
 	if err == gorm.ErrRecordNotFound {
@@ -58,4 +58,9 @@ func (u *UserService) GetUserById(dto *dto.BasicIdDTO) (model.User, error) {
 	}
 	modelUser.Password = ""
 	return modelUser, nil
+}
+
+// 查询用户列表
+func (u *UserService) GetUserList(dto *dto.UserListDTO) ([]model.User, int64, error) {
+	return u.Dao.GetUserList(*dto)
 }

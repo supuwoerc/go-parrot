@@ -20,8 +20,8 @@ type UserWithoutPassword struct {
 	Email    string `json:"email"`
 }
 
-func BuildLoginSuccessRes(user model.User, token string) BasicResponse {
-	return BasicResponse{
+func BuildLoginSuccessRes(user model.User, token string) BasicResponse[LoginSuccess] {
+	return BasicResponse[LoginSuccess]{
 		Code: constant.SUCCESS,
 		Data: LoginSuccess{
 			Name:  user.Name,
@@ -30,8 +30,8 @@ func BuildLoginSuccessRes(user model.User, token string) BasicResponse {
 	}
 }
 
-func BuildUserWithoutPasswordRes(user model.User) BasicResponse {
-	return BasicResponse{
+func BuildUserWithoutPasswordRes(user model.User) BasicResponse[UserWithoutPassword] {
+	return BasicResponse[UserWithoutPassword]{
 		Code: constant.SUCCESS,
 		Data: UserWithoutPassword{
 			Model:    user.Model,
@@ -42,4 +42,8 @@ func BuildUserWithoutPasswordRes(user model.User) BasicResponse {
 			Email:    user.Phone,
 		},
 	}
+}
+
+func BuildUserListRes(list []model.User, total int64) BasicResponse[DataList[model.User]] {
+	return BuildDataList[model.User](list, total)
 }

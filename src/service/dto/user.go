@@ -13,3 +13,8 @@ type UserAddDTO struct {
 	Email    string `form:"email" json:"email"`
 	Password string `form:"password" json:"password,omitempty" binding:"required"`
 }
+
+type UserListDTO struct {
+	Paginate
+	Name string `form:"name" json:"name"`
+}

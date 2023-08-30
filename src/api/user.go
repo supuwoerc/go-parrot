@@ -32,21 +32,21 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 	var loginDTO dto.UserLoginDTO
 	errs := ctx.ShouldBind(&loginDTO)
 	if errs != nil {
-		serializer.Fail(ctx, serializer.BasicResponse{
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code: constant.InvalidParams,
 		})
 	} else {
 		loginUser, token, err := userApi.Service.Login(loginDTO)
 		if err != nil {
-			serializer.ServerFail(ctx, serializer.BasicResponse{
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
 				Code:    constant.ERROR,
 				Message: err.Error(),
 			})
 		} else {
+			//serializer.Success(ctx, serializer.BuildLoginSuccessRes(loginUser, token))
 			serializer.Success(ctx, serializer.BuildLoginSuccessRes(loginUser, token))
 		}
 	}
-
 }
 
 // @Tags 用户管理模块
@@ -61,18 +61,18 @@ func (userApi UserApi) AddUser(ctx *gin.Context) {
 	var userAddDTO dto.UserAddDTO
 	err := ctx.ShouldBindJSON(&userAddDTO)
 	if err != nil {
-		serializer.Fail(ctx, serializer.BasicResponse{
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code: constant.InvalidParams,
 		})
 	} else {
 		err := userApi.Service.AddUser(&userAddDTO)
 		if err != nil {
-			serializer.ServerFail(ctx, serializer.BasicResponse{
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
 				Code:    constant.ERROR,
 				Message: err.Error(),
 			})
 		} else {
-			serializer.Success(ctx, serializer.BasicResponse{
+			serializer.Success(ctx, serializer.BasicResponse[dto.UserAddDTO]{
 				Code: constant.SUCCESS,
 				Data: userAddDTO,
 			})
@@ -92,19 +92,48 @@ func (userApi UserApi) GetUserById(ctx *gin.Context) {
 	var basicIdDTO dto.BasicIdDTO
 	err := ctx.ShouldBindUri(&basicIdDTO)
 	if err != nil {
-		serializer.Fail(ctx, serializer.BasicResponse{
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code: constant.InvalidParams,
 		})
 	} else {
 		user, err := userApi.Service.GetUserById(&basicIdDTO)
 		if err != nil {
-			serializer.ServerFail(ctx, serializer.BasicResponse{
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
 				Code:    constant.ERROR,
 				Data:    nil,
 				Message: err.Error(),
 			})
 		} else {
 			serializer.Success(ctx, serializer.BuildUserWithoutPasswordRes(user))
+		}
+	}
+}
+
+// @Tags 用户管理模块
+// @Summary 查询用户列表
+// @Description 查询用户列表
+// @Accept  json
+// @Param   body body dto.BasicIdDTO true "GET USER INFO"
+// @Success 200 {object} string "操作成功"
+// @Failure 500 {object} string "操作失败"
+// @Router /api/public/user/add [post]
+func (userApi UserApi) GetUserList(ctx *gin.Context) {
+	var userListDTO dto.UserListDTO
+	err := ctx.ShouldBindUri(&userListDTO)
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
+			Code: constant.InvalidParams,
+		})
+	} else {
+		list, total, err := userApi.Service.GetUserList(&userListDTO)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
+				Code:    constant.ERROR,
+				Data:    nil,
+				Message: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BuildUserListRes(list, total))
 		}
 	}
 }
