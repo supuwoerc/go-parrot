@@ -119,7 +119,7 @@ func (userApi UserApi) GetUserById(ctx *gin.Context) {
 // @Router /api/public/user/add [post]
 func (userApi UserApi) GetUserList(ctx *gin.Context) {
 	var userListDTO dto.UserListDTO
-	err := ctx.ShouldBindUri(&userListDTO)
+	err := ctx.ShouldBindJSON(&userListDTO)
 	if err != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code: constant.InvalidParams,

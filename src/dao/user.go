@@ -68,6 +68,10 @@ func (u *UserDao) GetUserById(id uint) (model.User, error) {
 func (u *UserDao) GetUserList(dto dto.UserListDTO) ([]model.User, int64, error) {
 	var userList []model.User
 	var total int64
-	err := u.Orm.Model(&model.User{}).Where("name = ?", dto.Name).Scopes(Paginate(dto.Paginate)).Find(&userList).Offset(-1).Limit(-1).Count(&total).Error
+	db := u.Orm.Model(&model.User{})
+	if dto.Name != "" {
+		db.Where("name = ?", dto.Name)
+	}
+	err := db.Scopes(Paginate(dto.Paginate)).Find(&userList).Offset(-1).Limit(-1).Count(&total).Error
 	return userList, total, err
 }
