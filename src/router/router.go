@@ -12,7 +12,6 @@ import (
 	_ "go-parrot/docs"
 	"go-parrot/src/global"
 	"go-parrot/src/middleware"
-	"go-parrot/src/router/npm"
 	"net/http"
 	"os/signal"
 	"strings"
@@ -33,9 +32,9 @@ func RouteRegister(register IRouteRegister) {
 
 // 初始化系统模块路由
 func initSystemRouter(public *gin.RouterGroup, auth *gin.RouterGroup) {
-	InitBasicRoutes()              //测试路由
-	InitUserRoutes()               //用户基础模块
-	npm.InitPackageManagerRoutes() //npm数据模块
+	InitBasicRoutes()          //测试路由
+	InitUserRoutes()           //用户基础模块
+	InitPackageManagerRoutes() //npm数据模块
 	for _, val := range routeRegisters {
 		val(public, auth)
 	}
