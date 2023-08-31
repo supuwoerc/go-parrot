@@ -25,12 +25,14 @@ func NewPackageManagerApi() PackageManagerApi {
 }
 
 // @Tags NPM数据查询
-// @Summary 查询NPM数最近的下载数据
-// @Description 查询用户列表
-// @Accept  json
-// @Param   body body npm2.PackageDownloadsDTO true "GET PACKAGE DOWNLOADS"
-// @Success 200 {object} string "操作成功"
-// @Failure 500 {object} string "操作失败"
+// @Summary 获取指定时间范围内的下载数据
+// @Description 根据指定的时间范围和包名获取下载数据
+// @Param package query string true "包名"
+// @Param start query string false "开始日期 (默认为7天前)" Format(yyyy-mm-dd)
+// @Param end query string false "结束日期 (默认为今天)" Format(yyyy-mm-dd)
+// @Success 200 {object} BasicResponse{data=DownloadData} "成功返回数据"
+// @Failure 400 {object} BasicResponse{code=int,message=string} "请求参数错误"
+// @Failure 500 {object} BasicResponse{code=int,message=string} "服务器错误"
 // @Router /api/public/npm/downloads [get]
 func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Context) {
 	var err error
