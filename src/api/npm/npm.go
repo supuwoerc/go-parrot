@@ -43,7 +43,7 @@ func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Cont
 	defaultStart := time.Now().AddDate(0, 0, -7).Format(time.DateOnly)
 	start := strings.Trim(ctx.DefaultQuery("start", defaultStart), " ")
 	defaultEnd := time.Now().Format(time.DateOnly)
-	end := strings.Trim(ctx.DefaultQuery("start", defaultEnd), " ")
+	end := strings.Trim(ctx.DefaultQuery("end", defaultEnd), " ")
 	if start == "" {
 		err = utils.AppendError(err, errors.New("开始时间不能为空"))
 	}
@@ -65,6 +65,7 @@ func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Cont
 			})
 		} else {
 			serializer.Success(ctx, serializer.BasicResponse[any]{
+				Code: constant.SUCCESS,
 				Data: res,
 			})
 		}
