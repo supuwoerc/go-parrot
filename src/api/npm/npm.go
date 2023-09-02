@@ -38,15 +38,22 @@ func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Cont
 	var err error
 	var packageName string
 	if packageName = ctx.Query("package"); strings.Trim(packageName, " ") == "" {
-		err = utils.AppendError(err, errors.New("package_name不能为空"))
+		err = utils.AppendError(err, errors.New("包名不能为空"))
 	}
 	defaultStart := time.Now().AddDate(0, 0, -7).Format(time.DateOnly)
-	start := ctx.DefaultQuery("start", defaultStart)
+	start := strings.Trim(ctx.DefaultQuery("start", defaultStart), " ")
 	defaultEnd := time.Now().Format(time.DateOnly)
-	end := ctx.DefaultQuery("start", defaultEnd)
+	end := strings.Trim(ctx.DefaultQuery("start", defaultEnd), " ")
+	if start == "" {
+		err = utils.AppendError(err, errors.New("开始时间不能为空"))
+	}
+	if end == "" {
+		err = utils.AppendError(err, errors.New("结束时间不能为空"))
+	}
 	if err != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
-			Code: constant.InvalidParams,
+			Code:    constant.InvalidParams,
+			Message: err.Error(),
 		})
 	} else {
 		res, err := packageManagerApi.Service.DownloadsByTimeRange(start, end, packageName)
