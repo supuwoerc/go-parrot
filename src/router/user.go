@@ -17,7 +17,7 @@ func InitUserRoutes() {
 		}
 		{
 			userAuthGroup.GET("/list", user.GetUserList)
-			userAuthGroup.PATCH("/update", user.GetUserList)
+			userAuthGroup.PATCH("/update", user.UpdateUser)
 		}
 	})
 }

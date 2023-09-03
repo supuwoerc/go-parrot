@@ -82,13 +82,15 @@ func (u *UserDao) UpdateUser(dto *dto.UserUpdateDTO) error {
 	if err != nil {
 		return err
 	} else {
-		err := mergo.Merge(&targetUser, model.User{
+		sourceUser := model.User{
+			Model:    targetUser.Model,
 			RealName: dto.RealName,
 			Avatar:   dto.Avatar,
 			Phone:    dto.Phone,
 			Email:    dto.Email,
 			Password: dto.Password,
-		})
+		}
+		err := mergo.Merge(&targetUser, sourceUser, mergo.WithOverride)
 		if err != nil {
 			return err
 		}

@@ -178,13 +178,14 @@ func (userApi UserApi) GetUserList(ctx *gin.Context) {
 // @Success 200 {object} serializer.BasicResponse[any] "Successfully updated"
 // @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
 // @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
-// @Router /api/user/update [put]
+// @Router /api/user/update [patch]
 func (userApi UserApi) UpdateUser(ctx *gin.Context) {
 	var userUpdateDTO dto.UserUpdateDTO
 	err := ctx.ShouldBindJSON(&userUpdateDTO)
 	if err != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
-			Code: constant.InvalidParams,
+			Code:    constant.InvalidParams,
+			Message: err.Error(),
 		})
 	} else {
 		err := userApi.Service.UpdateUser(&userUpdateDTO)

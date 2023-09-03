@@ -245,7 +245,7 @@ const docTemplate = `{
             }
         },
         "/api/user/update": {
-            "put": {
+            "patch": {
                 "description": "更新用户信息",
                 "consumes": [
                     "application/json"
@@ -365,7 +365,7 @@ const docTemplate = `{
         "dto.UserUpdateDTO": {
             "type": "object",
             "required": [
-                "password"
+                "id"
             ],
             "properties": {
                 "avatar": {

@@ -60,7 +60,7 @@ definitions:
       real_name:
         type: string
     required:
-    - password
+    - id
     type: object
   serializer.BasicResponse-any:
     properties:
@@ -227,7 +227,7 @@ paths:
       tags:
       - 用户管理模块
   /api/user/update:
-    put:
+    patch:
       consumes:
       - application/json
       description: 更新用户信息

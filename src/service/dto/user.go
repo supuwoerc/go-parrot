@@ -20,10 +20,10 @@ type UserListDTO struct {
 }
 
 type UserUpdateDTO struct {
-	ID       uint   `form:"id" json:"id"`
+	ID       uint   `form:"id" json:"id" binding:"required"`
 	RealName string `form:"real_name" json:"real_name"`
 	Avatar   string `form:"avatar" json:"avatar"`
 	Phone    string `form:"phone" json:"phone"`
 	Email    string `form:"email" json:"email"`
-	Password string `form:"password" json:"password,omitempty" binding:"required"`
+	Password string `form:"password" json:"password"`
 }
