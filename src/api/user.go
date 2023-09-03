@@ -7,8 +7,6 @@ import (
 	"go-parrot/src/service"
 	"go-parrot/src/service/dto"
 	"go-parrot/src/utils"
-	"strconv"
-	"strings"
 )
 
 type UserApi struct {
@@ -125,27 +123,11 @@ func (userApi UserApi) GetUserById(ctx *gin.Context) {
 // @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
 // @Router /api/public/user/list [post]
 func (userApi UserApi) GetUserList(ctx *gin.Context) {
-	var paramValidErr error
-	pageStr := ctx.DefaultQuery("page", "1")
-	pageSizeStr := ctx.DefaultQuery("page_size", "1")
-	if pageTrimStr := strings.Trim(pageStr, " "); pageTrimStr == "" {
-		pageStr = "1"
-	}
-	if pageSizeTrimStr := strings.Trim(pageSizeStr, " "); pageSizeTrimStr == "" {
-		pageSizeStr = "10"
-	}
-	page, err := strconv.Atoi(pageStr)
-	if err != nil {
-		paramValidErr = utils.AppendError(paramValidErr, err)
-	}
-	pageSize, err := strconv.Atoi(pageSizeStr)
-	if err != nil {
-		paramValidErr = utils.AppendError(paramValidErr, err)
-	}
+	page, pageSize, paramValidErr := utils.GetPaginateParam(ctx)
 	if paramValidErr != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code:    constant.InvalidParams,
-			Message: err.Error(),
+			Message: paramValidErr.Error(),
 		})
 	} else {
 		userListDTO := dto.UserListDTO{
