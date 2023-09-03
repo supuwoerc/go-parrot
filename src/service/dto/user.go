@@ -18,3 +18,12 @@ type UserListDTO struct {
 	Paginate
 	Name string `form:"name" json:"name"`
 }
+
+type UserUpdateDTO struct {
+	ID       uint   `form:"id" json:"id"`
+	RealName string `form:"real_name" json:"real_name"`
+	Avatar   string `form:"avatar" json:"avatar"`
+	Phone    string `form:"phone" json:"phone"`
+	Email    string `form:"email" json:"email"`
+	Password string `form:"password" json:"password,omitempty" binding:"required"`
+}

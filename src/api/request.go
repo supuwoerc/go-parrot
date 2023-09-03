@@ -20,3 +20,5 @@ func NewRequestApi() *RequestApi {
 	}
 	return requestApi
 }
+
+//TODO：请求日志列表查询

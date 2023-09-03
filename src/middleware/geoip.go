@@ -53,9 +53,12 @@ func GeoIp() gin.HandlerFunc {
 		// 经度
 		longitude = record.Location.Longitude
 		var requestService = service.NewRequestService()
+		//TODO:记录请求的用户信息
 		err = requestService.RequestRecordAdd(model.Request{
 			IP:        context.ClientIP(),
 			URI:       context.Request.RequestURI,
+			UID:       0,
+			UserName:  "",
 			City:      city,
 			Provinces: provinces,
 			Country:   country,
@@ -65,7 +68,7 @@ func GeoIp() gin.HandlerFunc {
 			Longitude: longitude,
 		})
 		if err != nil {
-			global.Logger.Error(fmt.Sprintf("记录geoip信息发生错误：%s", err.Error()))
+			global.Logger.Error(fmt.Sprintf("记录geo信息发生错误：%s", err.Error()))
 		}
 	}
 }

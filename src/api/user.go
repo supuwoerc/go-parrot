@@ -6,6 +6,9 @@ import (
 	"go-parrot/src/serializer"
 	"go-parrot/src/service"
 	"go-parrot/src/service/dto"
+	"go-parrot/src/utils"
+	"strconv"
+	"strings"
 )
 
 type UserApi struct {
@@ -25,8 +28,9 @@ func NewUserApi() UserApi {
 // @Description 用于用户登录系统
 // @Accept  json
 // @Param   body body dto.UserLoginDTO true "User Login Info"
-// @Success 200 {object} string "登录成功"
-// @Failure 500 {object} string "登录失败"
+// @Success 200 {object} serializer.BasicResponse[any] "Successfully login"
+// @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
+// @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
 // @Router /api/public/user/login [post]
 func (userApi UserApi) Login(ctx *gin.Context) {
 	var loginDTO dto.UserLoginDTO
@@ -54,8 +58,9 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 // @Description 用于添加用户
 // @Accept  json
 // @Param   body body dto.UserAddDTO true "ADD USER INFO"
-// @Success 200 {object} string "操作成功"
-// @Failure 500 {object} string "操作失败"
+// @Success 200 {object} serializer.BasicResponse[any] "Successfully add"
+// @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
+// @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
 // @Router /api/public/user/add [post]
 func (userApi UserApi) AddUser(ctx *gin.Context) {
 	var userAddDTO dto.UserAddDTO
@@ -85,9 +90,10 @@ func (userApi UserApi) AddUser(ctx *gin.Context) {
 // @Description 用于根据ID查询用户
 // @Accept  json
 // @Param   body body dto.BasicIdDTO true "GET USER INFO"
-// @Success 200 {object} string "操作成功"
-// @Failure 500 {object} string "操作失败"
-// @Router /api/public/user/add [post]
+// @Success 200 {object} serializer.BasicResponse[any] "Successfully get user info"
+// @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
+// @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
+// @Router /api/public/user/{id} [get]
 func (userApi UserApi) GetUserById(ctx *gin.Context) {
 	var basicIdDTO dto.BasicIdDTO
 	err := ctx.ShouldBindUri(&basicIdDTO)
@@ -113,18 +119,42 @@ func (userApi UserApi) GetUserById(ctx *gin.Context) {
 // @Summary 查询用户列表
 // @Description 查询用户列表
 // @Accept  json
-// @Param   body body dto.BasicIdDTO true "GET USER INFO"
-// @Success 200 {object} string "操作成功"
-// @Failure 500 {object} string "操作失败"
-// @Router /api/public/user/add [post]
+// @Param   body body dto.UserListDTO true "GET USER LIST"
+// @Success 200 {object} serializer.BasicResponse[any] "Successfully get user list"
+// @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
+// @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
+// @Router /api/public/user/list [post]
 func (userApi UserApi) GetUserList(ctx *gin.Context) {
-	var userListDTO dto.UserListDTO
-	err := ctx.ShouldBindJSON(&userListDTO)
+	var paramValidErr error
+	pageStr := ctx.DefaultQuery("page", "1")
+	pageSizeStr := ctx.DefaultQuery("page_size", "1")
+	if pageTrimStr := strings.Trim(pageStr, " "); pageTrimStr == "" {
+		pageStr = "1"
+	}
+	if pageSizeTrimStr := strings.Trim(pageSizeStr, " "); pageSizeTrimStr == "" {
+		pageSizeStr = "10"
+	}
+	page, err := strconv.Atoi(pageStr)
 	if err != nil {
+		paramValidErr = utils.AppendError(paramValidErr, err)
+	}
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil {
+		paramValidErr = utils.AppendError(paramValidErr, err)
+	}
+	if paramValidErr != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
-			Code: constant.InvalidParams,
+			Code:    constant.InvalidParams,
+			Message: err.Error(),
 		})
 	} else {
+		userListDTO := dto.UserListDTO{
+			Paginate: dto.Paginate{
+				Page:     page,
+				PageSize: pageSize,
+			},
+			Name: ctx.DefaultQuery("name", ""),
+		}
 		list, total, err := userApi.Service.GetUserList(&userListDTO)
 		if err != nil {
 			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
@@ -134,6 +164,40 @@ func (userApi UserApi) GetUserList(ctx *gin.Context) {
 			})
 		} else {
 			serializer.Success(ctx, serializer.BuildUserListRes(list, total))
+		}
+	}
+
+}
+
+// @Tags 用户管理模块
+// @Summary 更新用户信息
+// @Description 更新用户信息
+// @Accept  json
+// @Produce  json
+// @Param userUpdateDTO body dto.UserUpdateDTO true "Update User Info"
+// @Success 200 {object} serializer.BasicResponse[any] "Successfully updated"
+// @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
+// @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
+// @Router /api/user/update [put]
+func (userApi UserApi) UpdateUser(ctx *gin.Context) {
+	var userUpdateDTO dto.UserUpdateDTO
+	err := ctx.ShouldBindJSON(&userUpdateDTO)
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
+			Code: constant.InvalidParams,
+		})
+	} else {
+		err := userApi.Service.UpdateUser(&userUpdateDTO)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
+				Code:    constant.ERROR,
+				Data:    nil,
+				Message: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BasicResponse[any]{
+				Code: constant.SUCCESS,
+			})
 		}
 	}
 }

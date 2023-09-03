@@ -4,6 +4,8 @@ import "gorm.io/gorm"
 
 type Request struct {
 	gorm.Model
+	UID       uint    `gorm:"type:int"`
+	UserName  string  `gorm:"size:64;"`
 	IP        string  `gorm:"size:64;"`
 	URI       string  `gorm:"size:255"`
 	City      string  `gorm:"size:255"`

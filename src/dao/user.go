@@ -64,14 +64,34 @@ func (u *UserDao) GetUserById(id uint) (model.User, error) {
 	return modelUser, err
 }
 
-// 查询
+// 查询用户列表
 func (u *UserDao) GetUserList(dto dto.UserListDTO) ([]model.User, int64, error) {
 	var userList []model.User
 	var total int64
 	db := u.Orm.Model(&model.User{})
 	if dto.Name != "" {
-		db.Where("name = ?", dto.Name)
+		db.Where("name like ?", fmt.Sprintf("%%%s%%", dto.Name))
 	}
 	err := db.Scopes(Paginate(dto.Paginate)).Find(&userList).Offset(-1).Limit(-1).Count(&total).Error
 	return userList, total, err
+}
+
+// 更新用户信息
+func (u *UserDao) UpdateUser(dto *dto.UserUpdateDTO) error {
+	targetUser, err := u.GetUserById(dto.ID)
+	if err != nil {
+		return err
+	} else {
+		err := mergo.Merge(&targetUser, model.User{
+			RealName: dto.RealName,
+			Avatar:   dto.Avatar,
+			Phone:    dto.Phone,
+			Email:    dto.Email,
+			Password: dto.Password,
+		})
+		if err != nil {
+			return err
+		}
+		return u.Orm.Save(&targetUser).Error
+	}
 }

@@ -16,7 +16,8 @@ func InitUserRoutes() {
 			userGroup.GET("/:id", user.GetUserById)
 		}
 		{
-			userAuthGroup.POST("/list", user.GetUserList)
+			userAuthGroup.GET("/list", user.GetUserList)
+			userAuthGroup.PATCH("/update", user.GetUserList)
 		}
 	})
 }

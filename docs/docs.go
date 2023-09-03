@@ -20,38 +20,139 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/public/npm/downloads": {
+            "get": {
+                "description": "根据指定的时间范围和包名获取下载数据",
+                "tags": [
+                    "NPM数据查询"
+                ],
+                "summary": "获取指定时间范围内的下载数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "包名",
+                        "name": "package",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "yyyy-mm-dd",
+                        "description": "开始日期 (默认为7天前)",
+                        "name": "start",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "yyyy-mm-dd",
+                        "description": "结束日期 (默认为今天)",
+                        "name": "end",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回数据",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
         "/api/public/user/add": {
             "post": {
-                "description": "用于根据ID查询用户",
+                "description": "用于添加用户",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "用户管理模块"
                 ],
-                "summary": "查询用户",
+                "summary": "添加用户",
                 "parameters": [
                     {
-                        "description": "GET USER INFO",
+                        "description": "ADD USER INFO",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.BasicIdDTO"
+                            "$ref": "#/definitions/dto.UserAddDTO"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "操作成功",
+                        "description": "Successfully add",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
                         }
                     },
                     "500": {
-                        "description": "操作失败",
+                        "description": "Internal server error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/user/list": {
+            "post": {
+                "description": "查询用户列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "查询用户列表",
+                "parameters": [
+                    {
+                        "description": "GET USER LIST",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserListDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully get user list",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
                         }
                     }
                 }
@@ -80,15 +181,110 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "登录成功",
+                        "description": "Successfully login",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
                         }
                     },
                     "500": {
-                        "description": "登录失败",
+                        "description": "Internal server error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/user/{id}": {
+            "get": {
+                "description": "用于根据ID查询用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "查询用户",
+                "parameters": [
+                    {
+                        "description": "GET USER INFO",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BasicIdDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully get user info",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/update": {
+            "put": {
+                "description": "更新用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "更新用户信息",
+                "parameters": [
+                    {
+                        "description": "Update User Info",
+                        "name": "userUpdateDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserUpdateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
                         }
                     }
                 }
@@ -137,6 +333,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UserListDTO": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserLoginDTO": {
             "type": "object",
             "required": [
@@ -148,6 +358,44 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserUpdateDTO": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "real_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "serializer.BasicResponse-any": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
                     "type": "string"
                 }
             }

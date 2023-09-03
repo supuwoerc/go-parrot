@@ -30,9 +30,9 @@ func NewPackageManagerApi() PackageManagerApi {
 // @Param package query string true "包名"
 // @Param start query string false "开始日期 (默认为7天前)" Format(yyyy-mm-dd)
 // @Param end query string false "结束日期 (默认为今天)" Format(yyyy-mm-dd)
-// @Success 200 {object} BasicResponse{data=DownloadData} "成功返回数据"
-// @Failure 400 {object} BasicResponse{code=int,message=string} "请求参数错误"
-// @Failure 500 {object} BasicResponse{code=int,message=string} "服务器错误"
+// @Success 200 {object} serializer.BasicResponse[any] "成功返回数据"
+// @Failure 400 {object} serializer.BasicResponse[any] "请求参数错误"
+// @Failure 500 {object} serializer.BasicResponse[any] "服务器错误"
 // @Router /api/public/npm/downloads [get]
 func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Context) {
 	var err error

@@ -64,3 +64,9 @@ func (u *UserService) GetUserById(dto *dto.BasicIdDTO) (model.User, error) {
 func (u *UserService) GetUserList(dto *dto.UserListDTO) ([]model.User, int64, error) {
 	return u.Dao.GetUserList(*dto)
 }
+
+// 修改用户信息
+func (u *UserService) UpdateUser(dto *dto.UserUpdateDTO) error {
+	//TODO：添加权限控制，只允许用户修改自己的账户信息
+	return u.Dao.UpdateUser(dto)
+}

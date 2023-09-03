@@ -63,7 +63,7 @@ func InitRouter() {
 	defer stop()
 	r := gin.Default()
 	//跨域配置
-	r.Use(middleware.Cors(), middleware.GeoIp())
+	r.Use(middleware.Cors(), middleware.JWTMiddleware(), middleware.GeoIp())
 	publicGroup := r.Group("/api/public")
 	authGroup := r.Group("/api")
 	initSystemRouter(publicGroup, authGroup)
