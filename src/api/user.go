@@ -123,7 +123,7 @@ func (userApi UserApi) GetUserById(ctx *gin.Context) {
 // @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
 // @Router /api/public/user/list [post]
 func (userApi UserApi) GetUserList(ctx *gin.Context) {
-	page, pageSize, paramValidErr := utils.GetPaginateParam(ctx)
+	paginate, paramValidErr := utils.GetPaginateParam(ctx)
 	if paramValidErr != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code:    constant.InvalidParams,
@@ -131,11 +131,8 @@ func (userApi UserApi) GetUserList(ctx *gin.Context) {
 		})
 	} else {
 		userListDTO := dto.UserListDTO{
-			Paginate: dto.Paginate{
-				Page:     page,
-				PageSize: pageSize,
-			},
-			Name: ctx.DefaultQuery("name", ""),
+			Paginate: paginate,
+			Name:     ctx.DefaultQuery("name", ""),
 		}
 		list, total, err := userApi.Service.GetUserList(&userListDTO)
 		if err != nil {
