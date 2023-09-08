@@ -15,8 +15,8 @@ func Cors() gin.HandlerFunc {
 			//TODO：站点限制
 			return true
 		},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTION"},
-		AllowHeaders:     []string{"Content-Type", "Authorization", "Accept"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Token", "Accept"},
 		AllowCredentials: true,
 	})
 }
