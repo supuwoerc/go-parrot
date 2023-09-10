@@ -70,3 +70,9 @@ func (u *UserService) UpdateUser(dto *dto.UserUpdateDTO) error {
 	//TODO：添加权限控制，只允许用户修改自己的账户信息
 	return u.Dao.UpdateUser(dto)
 }
+
+// 删除用户
+func (u *UserService) DeleteUser(id uint) error {
+	//TODO：添加权限控制，只允许用户删除自己的账户
+	return u.Dao.DeleteUserById(id)
+}

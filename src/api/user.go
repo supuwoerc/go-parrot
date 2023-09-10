@@ -181,3 +181,37 @@ func (userApi UserApi) UpdateUser(ctx *gin.Context) {
 		}
 	}
 }
+
+// @Tags 用户管理模块
+// @Summary 删除用户
+// @Description 根据用户ID删除用户
+// @Accept json
+// @Produce json
+// @Param id path int true "用户ID"
+// @Success 200 {object} serializer.BasicResponse[any]
+// @Failure 400 {object} serializer.BasicResponse[any]
+// @Failure 500 {object} serializer.BasicResponse[any]
+// @Router /api/user/delete/{id} [delete]
+func (userApi UserApi) DeleteUser(ctx *gin.Context) {
+	var userDeleteDTO dto.BasicIdDTO
+	err := ctx.ShouldBindUri(&userDeleteDTO)
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
+			Code:    constant.InvalidParams,
+			Message: err.Error(),
+		})
+	} else {
+		err := userApi.Service.DeleteUser(userDeleteDTO.ID)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
+				Code:    constant.ERROR,
+				Data:    nil,
+				Message: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BasicResponse[any]{
+				Code: constant.SUCCESS,
+			})
+		}
+	}
+}

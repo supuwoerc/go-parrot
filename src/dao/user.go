@@ -97,3 +97,8 @@ func (u *UserDao) UpdateUser(dto *dto.UserUpdateDTO) error {
 		return u.Orm.Save(&targetUser).Error
 	}
 }
+
+func (u *UserDao) DeleteUserById(id uint) error {
+	err := u.Orm.Delete(&model.User{}, id).Error
+	return err
+}

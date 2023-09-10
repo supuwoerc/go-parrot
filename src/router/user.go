@@ -18,6 +18,7 @@ func InitUserRoutes() {
 		{
 			userAuthGroup.GET("/list", user.GetUserList)
 			userAuthGroup.PATCH("/update", user.UpdateUser)
+			userAuthGroup.DELETE("/delete/:id", user.DeleteUser)
 		}
 	})
 }
