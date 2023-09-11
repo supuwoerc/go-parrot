@@ -42,3 +42,7 @@ func (c *RedisClient) Get(key string) (any, error) {
 func (c *RedisClient) Delete(keys ...string) error {
 	return client.Del(context.Background(), keys...).Err()
 }
+
+func (c *RedisClient) GetExpireDuration(key string) (time.Duration, error) {
+	return client.TTL(context.Background(), key).Result()
+}

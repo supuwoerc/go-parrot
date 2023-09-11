@@ -13,8 +13,10 @@ redis:
   password:
   db: 0
 jwt:
-  expires: 1440  # token过期时(分钟)
-  signingKey: parrot
+  expires: 1440              # token过期时(分钟)
+  signingKey: parrot         # 密钥
+  tokenKey: Authorization    # 客户端token对应的header-key
+  refreshThreshold: 3600       # 刷新token的TTL阈值(秒)
 log:
   maxSize: 1     # 日志文件切割尺寸(m)
   maxBackups: 10 # 保留文件对最大个数

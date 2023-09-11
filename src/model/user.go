@@ -27,3 +27,8 @@ func (user *User) EncryptPassword() error {
 func (user *User) BeforeCreate(db *gorm.DB) error {
 	return user.EncryptPassword()
 }
+
+type LoginUser struct {
+	ID   uint
+	Name string
+}

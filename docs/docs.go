@@ -201,49 +201,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/public/user/{id}": {
-            "get": {
-                "description": "用于根据ID查询用户",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户管理模块"
-                ],
-                "summary": "查询用户",
-                "parameters": [
-                    {
-                        "description": "GET USER INFO",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.BasicIdDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully get user info",
-                        "schema": {
-                            "$ref": "#/definitions/serializer.BasicResponse-any"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid parameters",
-                        "schema": {
-                            "$ref": "#/definitions/serializer.BasicResponse-any"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/serializer.BasicResponse-any"
-                        }
-                    }
-                }
-            }
-        },
         "/api/user/delete/{id}": {
             "delete": {
                 "description": "根据用户ID删除用户",
@@ -315,6 +272,49 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/{id}": {
+            "get": {
+                "description": "用于根据ID查询用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理模块"
+                ],
+                "summary": "查询用户",
+                "parameters": [
+                    {
+                        "description": "GET USER INFO",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BasicIdDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully get user info",
                         "schema": {
                             "$ref": "#/definitions/serializer.BasicResponse-any"
                         }

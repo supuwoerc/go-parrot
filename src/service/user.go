@@ -34,9 +34,9 @@ func NewUserService() *UserService {
 }
 
 // 存储user的token到redis
-func SetLoginUserToken2Redis(user model.User, token string) error {
+func SetLoginUserToken2Redis(id uint, token string) error {
 	expires := viper.GetDuration("jwt.expires") * time.Minute
-	redisKey := strings.Replace(constant.LOGIN_TOKEN_REDIS_KEY, "{ID}", strconv.Itoa(int(user.ID)), -1)
+	redisKey := strings.Replace(constant.LOGIN_TOKEN_REDIS_KEY, "{ID}", strconv.Itoa(int(id)), -1)
 	return global.RedisClient.Set(redisKey, token, expires)
 }
 
@@ -47,7 +47,7 @@ func (u *UserService) Login(dto dto.UserLoginDTO) (model.User, string, error) {
 		return user, "", errors.New("用户名或账户错误")
 	} else {
 		token, err := utils.GenerateToken(user.ID, user.Name)
-		err = SetLoginUserToken2Redis(user, token)
+		err = SetLoginUserToken2Redis(user.ID, token)
 		return user, token, err
 	}
 }

@@ -13,9 +13,9 @@ func InitUserRoutes() {
 		{
 			userGroup.POST("/login", user.Login)
 			userGroup.POST("/add", user.AddUser)
-			userGroup.GET("/:id", user.GetUserById)
 		}
 		{
+			userAuthGroup.GET("/:id", user.GetUserById)
 			userAuthGroup.GET("/list", user.GetUserList)
 			userAuthGroup.PATCH("/update", user.UpdateUser)
 			userAuthGroup.DELETE("/delete/:id", user.DeleteUser)

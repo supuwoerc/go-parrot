@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-parrot/src/constant"
 	"go-parrot/src/global"
 	"go-parrot/src/model"
 	"go-parrot/src/service"
@@ -53,12 +54,17 @@ func GeoIp() gin.HandlerFunc {
 		// 经度
 		longitude = record.Location.Longitude
 		var requestService = service.NewRequestService()
-		//TODO:记录请求的用户信息
+		loginUser := model.LoginUser{}
+		value, exists := context.Get(constant.LOGIN_USER_KEY)
+		if exists {
+			loginUser.ID = value.(model.LoginUser).ID
+			loginUser.Name = value.(model.LoginUser).Name
+		}
 		err = requestService.RequestRecordAdd(model.Request{
 			IP:        context.ClientIP(),
 			URI:       context.Request.RequestURI,
-			UID:       0,
-			UserName:  "",
+			UID:       loginUser.ID,
+			UserName:  loginUser.Name,
 			City:      city,
 			Provinces: provinces,
 			Country:   country,

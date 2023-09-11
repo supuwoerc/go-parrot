@@ -114,34 +114,6 @@ paths:
       summary: 获取指定时间范围内的下载数据
       tags:
       - NPM数据查询
-  /api/public/user/{id}:
-    get:
-      consumes:
-      - application/json
-      description: 用于根据ID查询用户
-      parameters:
-      - description: GET USER INFO
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/dto.BasicIdDTO'
-      responses:
-        "200":
-          description: Successfully get user info
-          schema:
-            $ref: '#/definitions/serializer.BasicResponse-any'
-        "400":
-          description: Invalid parameters
-          schema:
-            $ref: '#/definitions/serializer.BasicResponse-any'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/serializer.BasicResponse-any'
-      summary: 查询用户
-      tags:
-      - 用户管理模块
   /api/public/user/add:
     post:
       consumes:
@@ -224,6 +196,34 @@ paths:
           schema:
             $ref: '#/definitions/serializer.BasicResponse-any'
       summary: 用户登录
+      tags:
+      - 用户管理模块
+  /api/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 用于根据ID查询用户
+      parameters:
+      - description: GET USER INFO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BasicIdDTO'
+      responses:
+        "200":
+          description: Successfully get user info
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+        "400":
+          description: Invalid parameters
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+      summary: 查询用户
       tags:
       - 用户管理模块
   /api/user/delete/{id}:

@@ -91,7 +91,7 @@ func (userApi UserApi) AddUser(ctx *gin.Context) {
 // @Success 200 {object} serializer.BasicResponse[any] "Successfully get user info"
 // @Failure 400 {object} serializer.BasicResponse[any] "Invalid parameters"
 // @Failure 500 {object} serializer.BasicResponse[any] "Internal server error"
-// @Router /api/public/user/{id} [get]
+// @Router /api/user/{id} [get]
 func (userApi UserApi) GetUserById(ctx *gin.Context) {
 	var basicIdDTO dto.BasicIdDTO
 	err := ctx.ShouldBindUri(&basicIdDTO)
