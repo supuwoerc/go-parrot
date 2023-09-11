@@ -16,7 +16,7 @@ type CustomClaims struct {
 var signingKey = []byte(viper.GetString("jwt.signingKey"))
 
 func GenerateToken(id uint, name string) (string, error) {
-	expires := time.Duration(viper.GetInt("jwt.expires"))
+	expires := viper.GetDuration("jwt.expires") * time.Minute
 	claims := CustomClaims{
 		ID:   id,
 		Name: name,

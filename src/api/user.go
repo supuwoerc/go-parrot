@@ -45,7 +45,6 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 				Message: err.Error(),
 			})
 		} else {
-			//serializer.Success(ctx, serializer.BuildLoginSuccessRes(loginUser, token))
 			serializer.Success(ctx, serializer.BuildLoginSuccessRes(loginUser, token))
 		}
 	}

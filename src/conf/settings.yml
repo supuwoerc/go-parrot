@@ -13,7 +13,7 @@ redis:
   password:
   db: 0
 jwt:
-  expires: 10080  # token过期时(分钟)
+  expires: 1440  # token过期时(分钟)
   signingKey: parrot
 log:
   maxSize: 1     # 日志文件切割尺寸(m)

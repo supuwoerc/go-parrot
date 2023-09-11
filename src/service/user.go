@@ -3,11 +3,17 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/spf13/viper"
+	"go-parrot/src/constant"
 	"go-parrot/src/dao"
+	"go-parrot/src/global"
 	"go-parrot/src/model"
 	"go-parrot/src/service/dto"
 	"go-parrot/src/utils"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type UserService struct {
@@ -27,15 +33,21 @@ func NewUserService() *UserService {
 	return userService
 }
 
+// 存储user的token到redis
+func SetLoginUserToken2Redis(user model.User, token string) error {
+	expires := viper.GetDuration("jwt.expires") * time.Minute
+	redisKey := strings.Replace(constant.LOGIN_TOKEN_REDIS_KEY, "{ID}", strconv.Itoa(int(user.ID)), -1)
+	return global.RedisClient.Set(redisKey, token, expires)
+}
+
 // 用户登录
 func (u *UserService) Login(dto dto.UserLoginDTO) (model.User, string, error) {
-	user, err := u.Dao.GetUserByNameAndPassword(dto.Name, dto.Password)
-	if err == gorm.ErrRecordNotFound {
+	user, err := u.Dao.GetUserByName(dto.Name)
+	if err != nil || !utils.CompareHashAndPassword(dto.Password, user.Password) {
 		return user, "", errors.New("用户名或账户错误")
 	} else {
 		token, err := utils.GenerateToken(user.ID, user.Name)
-		//TODO:调整token写入redis策略
-		err = u.RedisClient.Set(user.Name, token)
+		err = SetLoginUserToken2Redis(user, token)
 		return user, token, err
 	}
 }

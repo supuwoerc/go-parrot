@@ -6,15 +6,16 @@ import (
 )
 
 type LoginSuccess struct {
-	Name  string `json:"name"`
-	Token string `json:"token"`
+	User  model.User `json:"user"`
+	Token string     `json:"token"`
 }
 
 func BuildLoginSuccessRes(user model.User, token string) BasicResponse[LoginSuccess] {
+	user.Password = ""
 	return BasicResponse[LoginSuccess]{
 		Code: constant.SUCCESS,
 		Data: LoginSuccess{
-			Name:  user.Name,
+			User:  user,
 			Token: token,
 		},
 	}

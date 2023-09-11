@@ -9,7 +9,7 @@ import (
 
 var client *redis.Client
 
-const duration = 30 * 24 * 60 * 60 * time.Second
+const DefaultDuration = 30 * 24 * 60 * 60 * time.Second
 
 type RedisClient struct {
 }
@@ -28,7 +28,10 @@ func InitRedis() (*RedisClient, error) {
 	return &RedisClient{}, nil
 }
 
-func (c *RedisClient) Set(key string, value any) error {
+func (c *RedisClient) Set(key string, value any, duration time.Duration) error {
+	if duration <= 0 {
+		duration = DefaultDuration
+	}
 	return client.Set(context.Background(), key, value, duration).Err()
 }
 
