@@ -63,6 +63,7 @@ func (userApi UserApi) Login(ctx *gin.Context) {
 func (userApi UserApi) AddUser(ctx *gin.Context) {
 	var userAddDTO dto.UserAddDTO
 	err := ctx.ShouldBindJSON(&userAddDTO)
+	//TODO:用户头像文件上传
 	if err != nil {
 		serializer.Fail(ctx, serializer.BasicResponse[any]{
 			Code: constant.InvalidParams,
