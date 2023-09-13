@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"go-parrot/src/constant"
 	"go-parrot/src/dao"
@@ -38,6 +39,17 @@ func SetLoginUserToken2Redis(id uint, token string) error {
 	expires := viper.GetDuration("jwt.expires") * time.Minute
 	redisKey := strings.Replace(constant.LOGIN_TOKEN_REDIS_KEY, "{ID}", strconv.Itoa(int(id)), -1)
 	return global.RedisClient.Set(redisKey, token, expires)
+}
+
+// 判断当前请求的用户
+func IsCurrentUser(ctx *gin.Context, id uint) bool {
+	loginUser := model.LoginUser{}
+	value, exists := ctx.Get(constant.LOGIN_USER_KEY)
+	if exists {
+		loginUser.ID = value.(model.LoginUser).ID
+		return loginUser.ID == id
+	}
+	return false
 }
 
 // 用户登录
