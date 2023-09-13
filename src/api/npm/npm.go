@@ -40,7 +40,7 @@ func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Cont
 	if packageName = ctx.Query("package"); strings.Trim(packageName, " ") == "" {
 		err = utils.AppendError(err, errors.New("包名不能为空"))
 	}
-	defaultStart := time.Now().AddDate(0, 0, -7).Format(time.DateOnly)
+	defaultStart := time.Now().AddDate(0, 0, -30).Format(time.DateOnly)
 	start := strings.Trim(ctx.DefaultQuery("start", defaultStart), " ")
 	defaultEnd := time.Now().Format(time.DateOnly)
 	end := strings.Trim(ctx.DefaultQuery("end", defaultEnd), " ")
