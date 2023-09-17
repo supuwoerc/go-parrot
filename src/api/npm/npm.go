@@ -71,3 +71,39 @@ func (packageManagerApi PackageManagerApi) GetDownloadsByTimeRange(ctx *gin.Cont
 		}
 	}
 }
+
+// @Tags NPM数据查询
+// @Summary 获取包meta信息
+// @Description 获取包meta信息
+// @Param package query string true "包名"
+// @Success 200 {object} serializer.BasicResponse[any] "成功返回数据"
+// @Failure 400 {object} serializer.BasicResponse[any] "请求参数错误"
+// @Failure 500 {object} serializer.BasicResponse[any] "服务器错误"
+// @Router /api/public/npm/info [get]
+func (packageManagerApi PackageManagerApi) GetPackageInfo(ctx *gin.Context) {
+	var err error
+	var packageName string
+	if packageName = ctx.Query("package"); strings.Trim(packageName, " ") == "" {
+		err = utils.AppendError(err, errors.New("包名不能为空"))
+	}
+	if err != nil {
+		serializer.Fail(ctx, serializer.BasicResponse[any]{
+			Code:    constant.InvalidParams,
+			Message: err.Error(),
+		})
+	} else {
+		res, err := packageManagerApi.Service.GetPackageInfo(packageName)
+		if err != nil {
+			serializer.ServerFail(ctx, serializer.BasicResponse[any]{
+				Code:    constant.ERROR,
+				Data:    nil,
+				Message: err.Error(),
+			})
+		} else {
+			serializer.Success(ctx, serializer.BasicResponse[any]{
+				Code: constant.SUCCESS,
+				Data: res,
+			})
+		}
+	}
+}

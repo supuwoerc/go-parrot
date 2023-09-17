@@ -72,6 +72,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/public/npm/info": {
+            "get": {
+                "description": "获取包meta信息",
+                "tags": [
+                    "NPM数据查询"
+                ],
+                "summary": "获取包meta信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "包名",
+                        "name": "package",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功返回数据",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.BasicResponse-any"
+                        }
+                    }
+                }
+            }
+        },
         "/api/public/user/add": {
             "post": {
                 "description": "用于添加用户",

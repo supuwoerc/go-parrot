@@ -11,6 +11,7 @@ func InitPackageManagerRoutes() {
 		userGroup := public.Group("/npm")
 		{
 			userGroup.GET("/downloads", packageManagerApi.GetDownloadsByTimeRange)
+			userGroup.GET("/info", packageManagerApi.GetPackageInfo)
 		}
 	})
 }

@@ -114,6 +114,31 @@ paths:
       summary: 获取指定时间范围内的下载数据
       tags:
       - NPM数据查询
+  /api/public/npm/info:
+    get:
+      description: 获取包meta信息
+      parameters:
+      - description: 包名
+        in: query
+        name: package
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功返回数据
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+        "500":
+          description: 服务器错误
+          schema:
+            $ref: '#/definitions/serializer.BasicResponse-any'
+      summary: 获取包meta信息
+      tags:
+      - NPM数据查询
   /api/public/user/add:
     post:
       consumes:
